@@ -14,6 +14,9 @@ All letters will be lowercase and all inputs will be valid.
 */
 
 
+//solution 1
+//1.使用输入输出控制类istringstream提取string中的word
+//2.使用Ascii码得出每个word值(a为97)
 #include <string>
 #include <sstream>
 
@@ -48,4 +51,87 @@ std::string highestScoringWord(const std::string &str)
   }
   return vec[index];
 }
+
+//solution 2
+//0.solution 1优化提取word的方式，提取计算单个word值的方法
+//1.使用输入输出控制类istringstream提取string中的word
+//2.使用Ascii码得出每个word值(a为97)
+#include <string>
+#include <sstream>
+
+using namespace std;
+int getWordValue(string word);
+
+std::string highestScoringWord(const std::string &str)
+{
+  istringstream is(str);
+  string word;
+  string highestWord;
+  int highest=0;
+  int cur=0;
+
+  while(is >> word)             // 取出word
+  {
+    cur=getWordValue(word);     // 计算word的值
+     if (cur > highest)
+     {
+         highest=cur;
+         highestWord=word;
+     }
+  }
+  return highestWord;
+}
+
+int getWordValue(string word)
+{
+    int nRes=0;
+    for (int i = 0; i < word.size(); ++i)
+    {
+        nRes+=(word[i]-96);
+    }
+    return nRes;
+}
+
+
+
+//solution 3
+//0.使用getline提取word
+//1.独立的计算word值的方法
+//2.使用Ascii码得出每个word值(a为97)
+#include <string>
+#include <sstream>
+
+using namespace std;
+int getWordValue(string word);
+
+std::string highestScoringWord(const std::string &str)
+{
+  istringstream is(str);
+  string word;
+  string highestWord;
+  int highest=0;
+  int cur=0;
+
+  while(getline(is,word,' '))   // 取出word
+  {
+    cur=getWordValue(word);     // 计算word的值
+     if (cur > highest)
+     {
+         highest=cur;
+         highestWord=word;
+     }
+  }
+  return highestWord;
+}
+
+int getWordValue(string word)
+{
+    int nRes=0;
+    for (int i = 0; i < word.size(); ++i)
+    {
+        nRes+=(word[i]-96);
+    }
+    return nRes;
+}
+
 
