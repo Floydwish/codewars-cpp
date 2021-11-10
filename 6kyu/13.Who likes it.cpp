@@ -17,6 +17,8 @@ It must return the display text as shown in the examples:
 Note: For 4 or more names, the number in "and 2 others" simply increases.
 */
 
+//solution 1
+//直接方法
 #include <string>
 
 using namespace std;
@@ -66,4 +68,26 @@ std::string likes(const std::vector<std::string> &names)
 
 
     return ret; 
+}
+
+
+//solution 2
+//0.简化
+//1.可以直接返回
+//2.可以一次连接多个字符串
+#include <string>
+
+using namespace std;
+
+std::string likes(const std::vector<std::string> &names)
+{
+    int nameSize = names.size();
+    switch(nameSize)
+    {
+        case 0: return "no one likes this";
+        case 1: return names[0]+" likes this";
+        case 2: return names[0]+" and " + names[1] +" like this";
+        case 3: return names[0]+", " + names[1] + " and " + names[2] + " like this";
+        default:return names[0]+", " + names[1] + " and " + to_string(nameSize-2) + " others like this";
+    }
 }
