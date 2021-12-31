@@ -64,3 +64,71 @@ std::vector<int> firstNSmallest(const std::vector<int> arr, int n) {
     return ret;
 
 }
+
+
+//solution 2
+//1.循环遍历vector,循环次数为待删除元素的数量
+//2.每次循环找出一对最小值和最大值,删除其中的最大值(最大值从后向前查找和删除)
+
+/*
+minmax_element()的返回值说明：(如果有相等的最小值,返回第1个,如果有相等的最大值,返回最后一个)
+Return value
+a pair consisting of an iterator to the smallest element as the first element and 
+an iterator to the greatest element as the second. Returns std::make_pair(first, first) 
+if the range is empty. If several elements are equivalent to the smallest element, 
+the iterator to the first such element is returned. If several elements are equivalent 
+to the largest element, the iterator to the last such element is returned.
+*/
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+std::vector<int> firstNSmallest(const std::vector<int> arr, int n) 
+{
+    vector<int> ret(arr);
+    for (int i = 0; i < arr.size() - n; i++)
+    {
+        auto at = minmax_element(ret.begin(), ret.end());
+        ret.erase(at.second);
+    }
+    return ret;
+}
+
+
+//solution 3
+//1.循环遍历vector,循环次数为待删除元素的数量
+//2.每次循环,从后往前找出并删除最大值
+/*
+说明：
+0.由于题目测试要求,若存在相等的值,一个需要删除,一个不需要删除,那么应该删除原排序中靠后的
+1.使用max_element反向查找最大值(传入reverse_iterator,由ret.rbegin()和ret.rend()提供)
+2.找出最大值后返回为reverse_iterator,不能直接用于erase中,需转换为iterator
+3.使用reverse_iterator的base()获取iterator,该iterator指向的元素为reverse_iterator指向的后1个元素
+4.因此,需要在erase中传入iterator指向元素的前一个元素(或者,将reverse_iterator+1-前移1个元素，再获取iterator)
+*/
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+std::vector<int> firstNSmallest(const std::vector<int> arr, int n)
+{
+    vector<int> ret(arr);
+    vector<int>::reverse_iterator it;
+    for (int i = 0; i < arr.size() - n; i++)
+    {
+        it = max_element(ret.rbegin(), ret.rend());
+
+        //printf("it = %d, it+1 = %d\n", *it, *(it + 1));
+        //printf("it.base() = %d, (it+1).base() = %d\n", *(it.base()), *((it + 1).base()));
+        
+        ret.erase(it.base()-1);     //操作iterator
+        //ret.erase((it+1).base()); //操作reverse_iterator(效果一致)
+      
+   
+    }
+    return ret;
+}
+
+
