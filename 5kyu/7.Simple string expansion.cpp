@@ -35,15 +35,89 @@ Describe(Simple_string_expansion)
 
 */
 
-//solution 1
-//1.循环取括号及数据
-//2.当遇到有括号")"时执行一次，依次执行
+//solution 0
+//1.提取出repeat函数,用于扩展字符串
+//2.从后往前循环遍历,记录下
 
 #include <string>
 
 using namespace std;
 
+
+string repeat(string str,int count)
+{
+    string ret;
+    for (int i = 0; i < count; i++)
+    {
+        ret += str;
+    }
+    return ret;
+}
+
 std::string solve(std::string s)
 {
-      
+    string str(s);
+    int left = 0;
+    int right = 0;
+    string ch = "";
+    string cur = "";
+    for (int i = s.size()-1; i >= 0; i--)
+    {
+        if (s[i] == ')')
+            right++;
+        else if (s[i] == '(')
+            left++;
+        else if (isalpha(s[i]))
+            ch += s[i];
+        else if (isdigit(s[i]))
+        {
+            int tmp = int(s[i]-'0');
+            cur = repeat(ch, tmp);
+            ch = cur;
+        }
+    }
+    reverse(ch.begin(), ch.end());
+    return ch;
+}
+
+
+
+//solution 1
+//1.提取出repeat函数,用于扩展字符串
+//2.从后往前循环遍历,遇到字符时,保存到临时string
+//3.遇到数字时,扩展该临时string,将扩展结果作为临时string,依次类推
+//4.最后将string反转后返回
+
+#include <string>
+
+using namespace std;
+
+
+string repeat(string str,int count)
+{
+    string ret;
+    for (int i = 0; i < count; i++)
+    {
+        ret += str;
+    }
+    return ret;
+}
+
+std::string solve(std::string s)
+{
+    string str(s);
+    string ch = "";
+    string cur = "";
+    for (int i = s.size()-1; i >= 0; i--)
+    {
+        if (isalpha(s[i]))
+            ch += s[i];
+        else if (isdigit(s[i]))
+        {
+            int tmp = int(s[i]-'0');
+            cur = repeat(ch, tmp);
+            ch = cur;
+        }
+    }
+    return string(ch.rbegin(),ch.rend());
 }
